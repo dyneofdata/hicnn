@@ -36,5 +36,5 @@ File | Description
 output/\[chromosome #\]\_\[cell type\]\_f\[dataset fold\].hdf5 | learned cnn model saved in hdf5 format, used by load.py
 output/\[chromosome #\]\_\[cell type\]\_f\[dataset fold\].txt | log file of cnn learning curve
 output/\[chromosome #\]\_\[cell type\]\_f\[dataset fold\]\_distribution.png | histogram of interacton counts by pairwise distance
-output/\[chromosome #\]\_\[cell type\]\_f\[dataset fold\]\_pearson.png  | Pearson correlation coefficientby pairwise distance
+output/\[chromosome #\]\_\[cell type\]\_f\[dataset fold\]\_pearson.png  | Pearson correlation coefficient by pairwise distance
 output/\[chromosome #\]\_\[cell type\]\_f\[dataset fold\]\_scatter.png  | scatterplot of predicted vs actual interaction counts
