@@ -2,15 +2,13 @@
 
 ### cnn.py
 Read in trainset data, build & save cnn model, evaluate against testset data, 
-output plots.
-
+output plots.  
 Usage: python cnn.py \[chromosome #\] \[cell type\] \[dataset fold\] 
 ```
 python cnn.py 1 Gm12878 0
 ```
 ### load.py
-Load existing cnn model, evaluate against testset data, output plots.
-
+Load existing cnn model, evaluate against testset data, output plots.  
 Usage: python cnn.py \[chromosome #\] \[cell type\] \[dataset fold\]
 ```
 python load.py 1 Gm12878 0
