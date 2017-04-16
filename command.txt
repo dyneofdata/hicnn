@@ -1,0 +1,29 @@
+python cnn.py sequence.txt input/chr1/Gm12878/train0.txt input/chr1/Gm12878/test0.txt output/Gm12878_Chromosome1_F0
+python cnn.py sequence.txt input/chr1/Gm12878/train1.txt input/chr1/Gm12878/test1.txt output/Gm12878_Chromosome1_F1
+python cnn.py sequence.txt input/chr1/Gm12878/train2.txt input/chr1/Gm12878/test2.txt output/Gm12878_Chromosome1_F2
+python cnn.py sequence.txt input/chr1/Gm12878/train3.txt input/chr1/Gm12878/test3.txt output/Gm12878_Chromosome1_F3
+python cnn.py sequence.txt input/chr1/Gm12878/train4.txt input/chr1/Gm12878/test4.txt output/Gm12878_Chromosome1_F4
+
+python cnn.py sequence.txt input/chr1/Nhek/train0.txt input/chr1/Nhek/test0.txt output/Nhek_Chromosome1_F0
+python cnn.py sequence.txt input/chr1/Nhek/train1.txt input/chr1/Nhek/test1.txt output/Nhek_Chromosome1_F1
+python cnn.py sequence.txt input/chr1/Nhek/train2.txt input/chr1/Nhek/test2.txt output/Nhek_Chromosome1_F2
+python cnn.py sequence.txt input/chr1/Nhek/train3.txt input/chr1/Nhek/test3.txt output/Nhek_Chromosome1_F3
+python cnn.py sequence.txt input/chr1/Nhek/train4.txt input/chr1/Nhek/test4.txt output/Nhek_Chromosome1_F4
+
+python cnn.py sequence.txt input/chr1/Hmec/train0.txt input/chr1/Hmec/test0.txt output/Hmec_Chromosome1_F0
+python cnn.py sequence.txt input/chr1/Hmec/train1.txt input/chr1/Hmec/test1.txt output/Hmec_Chromosome1_F1
+python cnn.py sequence.txt input/chr1/Hmec/train2.txt input/chr1/Hmec/test2.txt output/Hmec_Chromosome1_F2
+python cnn.py sequence.txt input/chr1/Hmec/train3.txt input/chr1/Hmec/test3.txt output/Hmec_Chromosome1_F3
+python cnn.py sequence.txt input/chr1/Hmec/train4.txt input/chr1/Hmec/test4.txt output/Hmec_Chromosome1_F4
+
+python cnn.py sequence.txt input/chr1/Huvec/train0.txt input/chr1/Huvec/test0.txt output/Huvec_Chromosome1_F0
+python cnn.py sequence.txt input/chr1/Huvec/train1.txt input/chr1/Huvec/test1.txt output/Huvec_Chromosome1_F1
+python cnn.py sequence.txt input/chr1/Huvec/train2.txt input/chr1/Huvec/test2.txt output/Huvec_Chromosome1_F2
+python cnn.py sequence.txt input/chr1/Huvec/train3.txt input/chr1/Huvec/test3.txt output/Huvec_Chromosome1_F3
+python cnn.py sequence.txt input/chr1/Huvec/train4.txt input/chr1/Huvec/test4.txt output/Huvec_Chromosome1_F4
+
+python cnn.py sequence.txt input/chr1/K562/train0.txt input/chr1/K562/test0.txt output/K562_Chromosome1_F0
+python cnn.py sequence.txt input/chr1/K562/train1.txt input/chr1/K562/test1.txt output/K562_Chromosome1_F1
+python cnn.py sequence.txt input/chr1/K562/train2.txt input/chr1/K562/test2.txt output/K562_Chromosome1_F2
+python cnn.py sequence.txt input/chr1/K562/train3.txt input/chr1/K562/test3.txt output/K562_Chromosome1_F3
+python cnn.py sequence.txt input/chr1/K562/train4.txt input/chr1/K562/test4.txt output/K562_Chromosome1_F4
