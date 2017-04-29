@@ -38,13 +38,9 @@ output_name = 'output/chr' + chro + '_' + cell + '_f' + fold + '_' + mode
 image_title = 'Chromosome ' + chro + ' ' + cell + ' (Fold=' + fold + ')'
 
 ## Sequence data (features):
-with open(input_seq) as seqData:
-	reader = csv.reader(seqData, delimiter= '\t')
-	seqData = list(reader)
-seqData.pop(0)
 numRegions = 50000
 shape = (numRegions, 625)
-print shape
+
 A = np.zeros(shape = shape)
 C = np.zeros(shape = shape)
 T = np.zeros(shape = shape)
@@ -57,39 +53,46 @@ c = '000011000'
 g = '000000110'
 l = [a, t, c, g]
 
-for region in seqData:
-	idx = int(int(region[0].split('_')[1])/5000)
-	for nt, out in enumerate(l):
-		trans = maketrans(o, out)
-		s = region[1][:-2].translate(trans)
-		b = bitstring.BitArray(bin = s)
-		i = [float(ord(x)) for x in b.tobytes()]
-		if nt == 0:
-			A[idx] = i
-		elif nt == 1:
-			T[idx] = i
-		elif nt == 2:
-			C[idx] = i
-		else:
-			G[idx] = i 
+with open(input_seq) as seqData:
+	next(seqData)
+	for line in seqData:
+		region = line.split('\t')
+		idx = int(int(region[0].split('_')[1])/5000)
+		for nt, out in enumerate(l):
+			trans = maketrans(o, out)
+			s = region[1][:-2].translate(trans)
+			b = bitstring.BitArray(bin = s)
+			i = [float(ord(x)) for x in b.tobytes()]
+			if nt == 0:
+				A[idx] = i
+			elif nt == 1:
+				T[idx] = i
+			elif nt == 2:
+				C[idx] = i
+			else:
+				G[idx] = i 
 
 ## Train data:
+numExamples = 0
 with open(input_train) as trainData:
-	reader2 = csv.reader(trainData, delimiter = '\t')
-	trainData = list(reader2)
-trainData.pop(0)
-numExamples = int(len(trainData))
+	numExamples = int(next(trainData))
 	
 shape = [numExamples] + [625] + [4]
 X1 = np.zeros(shape = shape)
 X2 = np.zeros(shape = shape)
-Y = np.array(trainData)[:,2].astype(float)
+Y = np.zeros(numExamples)
 
-for idx, example in enumerate(trainData):
-        e = int(example[0])
-        p = int(example[1])     
-	X1[idx] = np.array((A[e], C[e], G[e], T[e])).T
-	X2[idx] = np.array((A[p], C[p], G[p], T[p])).T
+with open(input_train) as trainData:
+	next(trainData)
+	idx = 0
+	for line in trainData:
+		example = line.split('\t')
+		e = int(example[0])
+		p = int(example[1])     
+		Y[idx] = float(example[2])
+		X1[idx] = np.array((A[e], C[e], G[e], T[e])).T
+		X2[idx] = np.array((A[p], C[p], G[p], T[p])).T
+		idx += 1
 
 ## Model:
 num_filters = 10
