@@ -5,6 +5,9 @@ import scipy as sp
 import matplotlib.pyplot as plt
 from scipy.stats import binned_statistic as bstat
 
+def generate_plots(pairDistance, truCount, predCount, predCount2, output, title):
+	#TODO: align by distance, call other functions
+
 def plotPearsonCoefficient(pairDistance, trueCount, predCount, predCount2, output, title):
 	pearson = []
 	pearson2 = []
