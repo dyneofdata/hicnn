@@ -3,7 +3,7 @@
 ### Usage 
 python hicnn.py \[chromosome #\] \[cell type\]
 ```
-python cnn.py 1 Gm12878
+python hicnn.py 1 Gm12878
 ```
 ### Input Files
 - input/\[chromosome #\]/raw_sequence.txt
