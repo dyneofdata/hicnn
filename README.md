@@ -18,8 +18,8 @@ python cnn.py 1 Gm12878
 ### Output Files
 File | Description
 -----|------------
-output/\[chromosome #\]\_\[cell type\]\_f\[dataset fold\].hdf5 | learned cnn model saved in hdf5 format, used by load.py
-output/\[chromosome #\]\_\[cell type\]\_f\[dataset fold\].txt | log file of cnn learning curve
-output/\[chromosome #\]\_\[cell type\]\_f\[dataset fold\]\_distribution.png | histogram of interacton counts by pairwise distance
-output/\[chromosome #\]\_\[cell type\]\_f\[dataset fold\]\_pearson.png  | Pearson correlation coefficient by pairwise distance
-output/\[chromosome #\]\_\[cell type\]\_f\[dataset fold\]\_scatter.png  | scatterplot of predicted vs actual interaction counts
+output/\[chromosome #\]\_\[cell type\].hdf5 | learned model saved in hdf5 format
+output/\[chromosome #\]\_\[cell type\].txt | log file of learning curve
+output/\[chromosome #\]\_\[cell type\]\_distribution.png | mean and standard deviation of actual counts plotted next to those of predicted counts, by pairwise distance
+output/\[chromosome #\]\_\[cell type\]\_pearson.png  | Pearson correlation coefficient between predicted and actual counts, by pairwise distance
+output/\[chromosome #\]\_\[cell type\]\_scatter.png  | scatterplot of predicted vs actual interaction counts
