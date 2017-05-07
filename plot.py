@@ -5,8 +5,18 @@ import scipy as sp
 import matplotlib.pyplot as plt
 from scipy.stats import binned_statistic as bstat
 
-def generate_plots(pairDistance, truCount, predCount, predCount2, output, title):
-	#TODO: align by distance, call other functions
+def generate_plots(pairDistance, trueCount, predCount, predCount2, output, title):
+	r = np.random.random(pairDistance.size)
+	i = np.lexsort((r, pairDistance))
+	dist = pairDistance[i]
+	true = truecount[i]
+	pred1 = predCount[i]
+	pred2 = predCount2[i]
+	
+	plotPearsonCoefficient(dist, true, pred1,pred2, output,title)
+	plotScatter(dist, true, pred1, output, title)
+	plotMeanStdev(dist, true, pred1, output, title)
+	
 
 def plotPearsonCoefficient(pairDistance, trueCount, predCount, predCount2, output, title):
 	pearson = []

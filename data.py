@@ -11,8 +11,9 @@ class Data:
         self.input_train = ['input/chr' + chromosome + '/' + cell + '/train' + str(fold) + '.txt' for fold in range(5)]
         self.input_tune = ['input/chr' + chromosome + '/' + cell + '/test' + str(fold) + '.txt' for fold in [0,2,4]]
         self.input_test = ['input/chr' + chromosome + '/' + cell + '/test' + str(fold) + '.txt' for fold in [1,3]]
+        self.batch_size = batch_size
+        self.distance_scaler = 40
         generate_acgt()
-	self.batch_size = batch_size
 
     def generate_acgt(self):
         numRegions = 500000
@@ -41,16 +42,16 @@ class Data:
 
     def generate_train(self):
         while 1:
+            i = 0
             for file in self.input_train:
                 f = open(file)
                 next(f)
-                i = 0
                 X1 = np.zeros(shape = (self.batch_size, 625, 4))
                 X2 = np.zeros(shape = (self.batch_size, 625, 4))
                 X3 = np.zeros(batch_size)
                 Y = np.zeros(batch_size)
                 for line in f:
-                    if i = self.bath_size:
+                    if i == self.bath_size:
                         i = 0
                         yield([X1, X2, X3], Y)
                     example = line.split('\t')
@@ -58,23 +59,23 @@ class Data:
                     p = int(example[1])
                     X1[i] = self.acgt[e]
                     X2[i] = self.acgt[p]
-                    X3[i] = float(p - e)
+                    X3[i] = float(p - e) / self.distance_scaler
                     Y[i] = float(example([2])
                     i += 1
                 f.close()
 
     def generate_tune(self):
         while 1:
+            i = 0
             for file in self.input_tune:
                 f = open(file)
                 next(f)
-                i = 0
                 X1 = np.zeros(shape = (self.batch_size, 625, 4))
                 X2 = np.zeros(shape = (self.batch_size, 625, 4))
                 X3 = np.zeros(batch_size)
                 Y = np.zeros(batch_size)
                 for line in f:
-                    if i = self.bath_size:
+                    if i == self.bath_size:
                         i = 0
                         yield([X1,X2,X3], Y)
                     example = line.split('\t')
@@ -82,7 +83,7 @@ class Data:
                     p = int(example[1])
                     X1[i] = self.acgt[e]
                     X2[i] = self.acgt[p]
-                    X3[i] = float(p - e)
+                    X3[i] = float(p - e) / self.distance_scaler
                     Y[i] = float(example([2])
                     i += 1
                 f.close()
@@ -92,11 +93,11 @@ class Data:
         self.Y_actual = np.zeros(self.batch_size * steps)
         self.distance = np.zeros(self.batch_size * steps, dtype = np.int)
         while 1:
+            i = 0
+            cnt = 0
             for file in self.input_test:
                 f = open(file)
                 next(f)
-                i = 0
-                cnt = 0
                 X1 = np.zeros(shape = (self.batch_size, 625, 4))
                 X2 = np.zeros(shape = (self.batch_size, 625, 4))
                 X3 = np.zeros(batch_size)
@@ -109,7 +110,7 @@ class Data:
                     p = int(example[1])
                     X1[i] = self.acgt[e]
                     X2[i] = self.acgt[p]
-                    X3[i] = float(p - e)
+                    X3[i] = float(p - e) / self.distance_scaler
                     self.Y_actual[cnt] = float(example[2])
                     self.Y_ripple[cnt] = float(example[4])
                     self.distance[cnt] = int(example[3])

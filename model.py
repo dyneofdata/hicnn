@@ -1,6 +1,15 @@
+from __future__ import division
+import numpy as np
+import bitstring
+from string import maketrans
+from keras.layers.convolutional import Conv1D
+from keras.layers import Dense, Flatten, Dropout, Concatenate
+from keras.models import Model, load_model, Input
+from keras.layers.advanced_activations import ELU
+from keras.callbacks import ModelCheckpoint, EarlyStopping, CSVLogger, ReduceLROnPlateau
+from keras.optimizers import Adam
 from data import Data
 import plot
-#TODO: import all dependencies
 
 class Model:
 
@@ -14,7 +23,7 @@ class Model:
         self.dropout_prob = [0.8, 0.5, 0.5]
         self.hidden_dims = [300, 100, 50]
         
-        self.data = Data(chromosome, cell)
+        self.data = Data(chromosome, cell, 32)
         self.input_shape = [625] + [4]
 
         self.output_name = 'output/chr' + chromosome + '_' + cell
@@ -55,7 +64,11 @@ class Model:
                                      monitor = 'val_loss', 
                                      verbose = 0, 
                                      save_best_only = True)
-        callbacks = [early_stopping, csv_logger, checkpoint]
+        reduce_lr = ReduceLROnPlateau(monitor = 'val_loss',
+                                      factor = 0.1,
+                                      patience = 10,
+                                      min_lr = 0.0001)
+        callbacks = [early_stopping, csv_logger, checkpoint, reduce_lr]
 
         model = Model(inputs = [conv_X1, conv_X2, input_X3], 
                            outputs = [output])
