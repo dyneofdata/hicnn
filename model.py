@@ -2,7 +2,7 @@ from __future__ import division
 import numpy as np
 import keras
 from keras.layers.convolutional import Conv1D
-from keras.layers import Dense, Flatten, Dropout, concatenate, Activation
+from keras.layers import Dense, Flatten, Dropout, Concatenate, Activation
 from keras.models import Model, load_model, Input
 from keras.callbacks import ModelCheckpoint, EarlyStopping, CSVLogger, ReduceLROnPlateau
 from keras.optimizers import Adam
@@ -29,28 +29,43 @@ class Model:
         self.image_title = 'Chromosome' + chromosome + ' - Cell Type: ' + cell
 
     def train(self):
-        #print(keras.__version__)
+        
         input_X1 = Input(shape = self.input_shape)
         input_X2 = Input(shape = self.input_shape)
-        #lone_input_shape = [1]
-        #input_X3 = Input(shape = lone_input_shape)
+        lone_input_shape = [1]
+        input_X3 = Input(shape = lone_input_shape)
 
-        for i in range(1):
-            conv_X1 = Conv1D(filters = self.num_filters[i],kernel_size = self.kernel_size[i],strides = self.stride[i],activation = 'elu')(input_X1)
-            conv_X2 = Conv1D(filters = self.num_filters[i],kernel_size = self.kernel_size[i],strides = self.stride[i],activation = 'elu')(input_X2)
+        conv_X1 = Conv1D(filters = self.num_filters[0],
+                             kernel_size = self.kernel_size[0],
+                             strides = self.stride[0],
+                             activation = 'elu')(input_X1)
+        conv_X2 = Conv1D(filters = self.num_filters[0],
+                             kernel_size = self.kernel_size[0],
+                             strides = self.stride[0],
+                             activation = 'elu')(input_X2)
+        
+        for i in range(self.num_conv_layers)[1:]:
+            conv_X1 = Conv1D(filters = self.num_filters[i],
+                             kernel_size = self.kernel_size[i],
+                             strides = self.stride[i],
+                             activation = 'elu')(conv_X1)
+            conv_X2 = Conv1D(filters = self.num_filters[i],
+                             kernel_size = self.kernel_size[i],
+                             strides = self.stride[i],
+                             activation = 'elu')(conv_X2)
 
         conv_X1 = Flatten()(conv_X1)
         conv_X2 = Flatten()(conv_X2)
 
-        dense = concatenate([conv_X1, conv_X2])
+        dense = Concatenate()([conv_X1, conv_X2])
 
         for i in range(self.num_dense_layers):
             dense = Dense(self.hidden_dims[i], activation = 'elu')(dense)
             dense = Dropout(self.dropout_prob[i])(dense)
-
+        
         output = Activation('linear')(dense)
-
-        model = Model(output=output, input = [input_X1,input_X2])
+                
+        model = keras.models.Model(inputs = [input_X1, input_X2, input_X3], outputs = output)
         model.compile(loss = 'mean_squared_error', optimizer = 'adam')
 
         early_stopping = EarlyStopping(monitor = 'val_loss', 
@@ -66,13 +81,14 @@ class Model:
                                       patience = 10,
                                       min_lr = 0.0001)
         callbacks = [early_stopping, csv_logger, checkpoint, reduce_lr]
+        
         model.fit_generator(self.data.generate_train(),
                                  steps_per_epoch = 10000, 
                                  epochs = 100,
                                  verbose = 2,
                                  callbacks = callbacks,
                                  validation_data = self.data.generate_tune(),
-                                 validation_step = 1000)
+                                 validation_steps = 1000)
 
     def test(self):
         model = load_model(output_name + '.hdf5')

@@ -40,19 +40,19 @@ class Data:
                 self.acgt[idx] = bits.T
 
     def generate_train(self):
+        i = 0
+        X1 = np.zeros(shape = (self.batch_size, 625, 4))
+        X2 = np.zeros(shape = (self.batch_size, 625, 4))
+        X3 = np.zeros(self.batch_size)
+        Y = np.zeros(self.batch_size)
         while 1:
-            i = 0
             for file in self.input_train:
                 f = open(file)
                 next(f)
-                X1 = np.zeros(shape = (self.batch_size, 625, 4))
-                X2 = np.zeros(shape = (self.batch_size, 625, 4))
-                X3 = np.zeros(batch_size)
-                Y = np.zeros(batch_size)
                 for line in f:
-                    if i == self.bath_size:
+                    if i == self.batch_size:
                         i = 0
-                        yield([X1, X2], Y)
+                        yield([X1, X2, X3], Y)
                     example = line.split('\t')
                     e = int(example[0])
                     p = int(example[1])
@@ -64,19 +64,19 @@ class Data:
                 f.close()
 
     def generate_tune(self):
-        while 1:
-            i = 0
+        i = 0
+        X1 = np.zeros(shape = (self.batch_size, 625, 4))
+        X2 = np.zeros(shape = (self.batch_size, 625, 4))
+        X3 = np.zeros(self.batch_size)
+        Y = np.zeros(self.batch_size)
+        while 1: 
             for file in self.input_tune:
                 f = open(file)
                 next(f)
-                X1 = np.zeros(shape = (self.batch_size, 625, 4))
-                X2 = np.zeros(shape = (self.batch_size, 625, 4))
-                X3 = np.zeros(batch_size)
-                Y = np.zeros(batch_size)
                 for line in f:
-                    if i == self.bath_size:
+                    if i == self.batch_size:
                         i = 0
-                        yield([X1,X2], Y)
+                        yield([X1,X2,X3], Y)
                     example = line.split('\t')
                     e = int(example[0])
                     p = int(example[1])
@@ -91,19 +91,19 @@ class Data:
         self.Y_ripple = np.zeros(self.batch_size * steps) 
         self.Y_actual = np.zeros(self.batch_size * steps)
         self.distance = np.zeros(self.batch_size * steps, dtype = np.int)
+        i = 0
+        cnt = 0
+        X1 = np.zeros(shape = (self.batch_size, 625, 4))
+        X2 = np.zeros(shape = (self.batch_size, 625, 4))
+        X3 = np.zeros(self.batch_size)
         while 1:
-            i = 0
-            cnt = 0
             for file in self.input_test:
                 f = open(file)
                 next(f)
-                X1 = np.zeros(shape = (self.batch_size, 625, 4))
-                X2 = np.zeros(shape = (self.batch_size, 625, 4))
-                X3 = np.zeros(batch_size)
                 for line in f:
-                    if i == self.bath_size:
+                    if i == self.batch_size:
                         i = 0
-                        yield([X1, X2])    
+                        yield([X1, X2, X3])    
                     example = line.split('\t')
                     e = int(example[0])
                     p = int(example[1])
