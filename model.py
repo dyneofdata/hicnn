@@ -1,11 +1,9 @@
 from __future__ import division
 import numpy as np
-import bitstring
-from string import maketrans
+import keras
 from keras.layers.convolutional import Conv1D
-from keras.layers import Dense, Flatten, Dropout, Concatenate
+from keras.layers import Dense, Flatten, Dropout, concatenate, Activation
 from keras.models import Model, load_model, Input
-from keras.layers.advanced_activations import ELU
 from keras.callbacks import ModelCheckpoint, EarlyStopping, CSVLogger, ReduceLROnPlateau
 from keras.optimizers import Adam
 from data import Data
@@ -24,37 +22,36 @@ class Model:
         self.hidden_dims = [300, 100, 50]
         
         self.data = Data(chromosome, cell, 32)
+        self.data.generate_acgt()
         self.input_shape = [625] + [4]
 
         self.output_name = 'output/chr' + chromosome + '_' + cell
         self.image_title = 'Chromosome' + chromosome + ' - Cell Type: ' + cell
 
     def train(self):
-        conv_X1 = Input(shape = self.input_shape)
-        conv_X2 = Input(shape = self.input_shape)
-        input_X3 = Input(shape = (1,1)
+        #print(keras.__version__)
+        input_X1 = Input(shape = self.input_shape)
+        input_X2 = Input(shape = self.input_shape)
+        #lone_input_shape = [1]
+        #input_X3 = Input(shape = lone_input_shape)
 
-        for i in range(num_conv_layers):
-            conv_X1 = Conv1D(filters = self.num_filters[i],
-                             kernel_size = self.kernel_size[i],
-                             strides = self.stride[i])(conv_X1)
-            conv_X1 = ELU()(conv_X1)
-            conv_X2 = ConvID(filters = self.num_filters[i],
-                             kernel_size = self.kernel_size[i],
-                             strides = self.stride[i])(conv_X2)
-            conv_X2 = ELU()(conv_X2)
+        for i in range(1):
+            conv_X1 = Conv1D(filters = self.num_filters[i],kernel_size = self.kernel_size[i],strides = self.stride[i],activation = 'elu')(input_X1)
+            conv_X2 = Conv1D(filters = self.num_filters[i],kernel_size = self.kernel_size[i],strides = self.stride[i],activation = 'elu')(input_X2)
 
-        conv_X1 = Flatten()(convX1)
-        conv_X2 = Flatten()(convX2)
+        conv_X1 = Flatten()(conv_X1)
+        conv_X2 = Flatten()(conv_X2)
 
-        dense = Concatenate()([conv_X1, conv_X2, input_x3])
+        dense = concatenate([conv_X1, conv_X2])
 
-        for i in range(num_dense_layers):
-            dense = Dense(hidden_dims[i])(dense)
-            dense = Dropout(dropout_prob[i])(dense)
-            dense = ELU()(dense)
+        for i in range(self.num_dense_layers):
+            dense = Dense(self.hidden_dims[i], activation = 'elu')(dense)
+            dense = Dropout(self.dropout_prob[i])(dense)
 
-        output = Dense(1)(dense)
+        output = Activation('linear')(dense)
+
+        model = Model(output=output, input = [input_X1,input_X2])
+        model.compile(loss = 'mean_squared_error', optimizer = 'adam')
 
         early_stopping = EarlyStopping(monitor = 'val_loss', 
                                        patience = 10, 
@@ -69,11 +66,6 @@ class Model:
                                       patience = 10,
                                       min_lr = 0.0001)
         callbacks = [early_stopping, csv_logger, checkpoint, reduce_lr]
-
-        model = Model(inputs = [conv_X1, conv_X2, input_X3], 
-                           outputs = [output])
-        model.compile(loss = 'mean_squared_error', 
-                           optimizer = 'adam')
         model.fit_generator(self.data.generate_train(),
                                  steps_per_epoch = 10000, 
                                  epochs = 100,

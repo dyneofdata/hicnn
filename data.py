@@ -2,18 +2,17 @@ from __future__ import division
 import numpy as np
 import math
 import bitstring
-fromt string import maketrans
+#from string import maketrans # for python 2.6
 
 class Data:
 
     def __init__(self, chromosome, cell, batch_size):
-        self.input_seq = 'input/chr' + chrosome + '/raw_sequence.txt'
+        self.input_seq = 'input/chr' + chromosome + '/raw_sequence.txt'
         self.input_train = ['input/chr' + chromosome + '/' + cell + '/train' + str(fold) + '.txt' for fold in range(5)]
         self.input_tune = ['input/chr' + chromosome + '/' + cell + '/test' + str(fold) + '.txt' for fold in [0,2,4]]
         self.input_test = ['input/chr' + chromosome + '/' + cell + '/test' + str(fold) + '.txt' for fold in [1,3]]
         self.batch_size = batch_size
         self.distance_scaler = 40
-        generate_acgt()
 
     def generate_acgt(self):
         numRegions = 500000
@@ -29,16 +28,16 @@ class Data:
         l = [a,c,g,t]
 
         with open(self.input_seq) as seqData:
-        for line in seqData:
-            region = line.split('\t')
-            idx = int(int(region[0].split('_')[1])/5000)
-            bits = np.zeros(shape = (4,625))
-            for nt, bit in enumerate(l):
-                trans = maketrans(o, bit)
-                s = region[1][:-2].translate(trans)
-                b = bitstring.BitArray(bin = s)
-                bits[nt] = [float(ord(x)) for x in b.tobytes()]
-            self.acgt[idx] = bits.T
+            for line in seqData:
+                region = line.split('\t')
+                idx = int(int(region[0].split('_')[1])/5000)
+                bits = np.zeros(shape = (4,625))
+                for nt, bit in enumerate(l):
+                    trans = str.maketrans(o, bit) # remove str. for python 2
+                    s = region[1][:-2].translate(trans)
+                    b = bitstring.BitArray(bin = s)
+                    bits[nt] = [float(x) for x in b.tobytes()] # ord(x) for python 2
+                self.acgt[idx] = bits.T
 
     def generate_train(self):
         while 1:
@@ -53,14 +52,14 @@ class Data:
                 for line in f:
                     if i == self.bath_size:
                         i = 0
-                        yield([X1, X2, X3], Y)
+                        yield([X1, X2], Y)
                     example = line.split('\t')
                     e = int(example[0])
                     p = int(example[1])
                     X1[i] = self.acgt[e]
                     X2[i] = self.acgt[p]
                     X3[i] = float(p - e) / self.distance_scaler
-                    Y[i] = float(example([2])
+                    Y[i] = float(example[2])
                     i += 1
                 f.close()
 
@@ -77,14 +76,14 @@ class Data:
                 for line in f:
                     if i == self.bath_size:
                         i = 0
-                        yield([X1,X2,X3], Y)
+                        yield([X1,X2], Y)
                     example = line.split('\t')
                     e = int(example[0])
                     p = int(example[1])
                     X1[i] = self.acgt[e]
                     X2[i] = self.acgt[p]
                     X3[i] = float(p - e) / self.distance_scaler
-                    Y[i] = float(example([2])
+                    Y[i] = float(example[2])
                     i += 1
                 f.close()
 
@@ -102,9 +101,9 @@ class Data:
                 X2 = np.zeros(shape = (self.batch_size, 625, 4))
                 X3 = np.zeros(batch_size)
                 for line in f:
-                    if i = self.bath_size:
+                    if i == self.bath_size:
                         i = 0
-                        yield([X1, X2, X3])    
+                        yield([X1, X2])    
                     example = line.split('\t')
                     e = int(example[0])
                     p = int(example[1])

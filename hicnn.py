@@ -10,7 +10,7 @@ def parse_args():
     return parser.parse_args()
 
 def main(args):
-    hicnn = model.Model(args)
+    hicnn = model.Model(args.chromosome_number, args.cell_type)
     hicnn.train()
     hicnn.test()
 
