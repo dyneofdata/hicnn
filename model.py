@@ -18,7 +18,7 @@ class Model:
         self.num_filters = [10,5,1]
         
         self.num_dense_layers = 3
-        self.dropout_prob = [0.8, 0.5, 0.5]
+        self.dropout_prob = [0.5, 0.3, 0.3]
         self.hidden_dims = [300, 100, 50]
         
         self.data = Data(chromosome, cell, 32)
@@ -57,7 +57,8 @@ class Model:
         conv_X1 = Flatten()(conv_X1)
         conv_X2 = Flatten()(conv_X2)
 
-        dense = Concatenate()([conv_X1, conv_X2])
+        dense = Concatenate()([conv_X1, conv_X2, input_X3])
+        dense = Dropout(0.5)(dense)
 
         for i in range(self.num_dense_layers):
             dense = Dense(self.hidden_dims[i], activation = 'elu')(dense)
