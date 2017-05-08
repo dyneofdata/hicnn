@@ -63,7 +63,7 @@ class Model:
             dense = Dense(self.hidden_dims[i], activation = 'elu')(dense)
             dense = Dropout(self.dropout_prob[i])(dense)
         
-        output = Activation('linear')(dense)
+        output = Dense(1)(dense)
                 
         model = keras.models.Model(inputs = [input_X1, input_X2, input_X3], outputs = output)
         model.compile(loss = 'mean_squared_error', optimizer = 'adam')
