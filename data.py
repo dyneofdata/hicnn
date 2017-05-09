@@ -96,7 +96,7 @@ class Data:
         X1 = np.zeros(shape = (self.batch_size, 625, 4))
         X2 = np.zeros(shape = (self.batch_size, 625, 4))
         X3 = np.zeros(self.batch_size)
-        while 1:
+        while cnt < self.batch_size * steps:
             for file in self.input_test:
                 f = open(file)
                 next(f)
