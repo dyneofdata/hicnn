@@ -9,7 +9,7 @@ def generate_plots(pairDistance, trueCount, predCount, predCount2, output, title
 	r = np.random.random(pairDistance.size)
 	i = np.lexsort((r, pairDistance))
 	dist = pairDistance[i]
-	true = truecount[i]
+	true = trueCount[i]
 	pred1 = predCount[i]
 	pred2 = predCount2[i]
 	

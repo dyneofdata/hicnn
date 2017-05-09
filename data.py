@@ -96,7 +96,7 @@ class Data:
         X1 = np.zeros(shape = (self.batch_size, 625, 4))
         X2 = np.zeros(shape = (self.batch_size, 625, 4))
         X3 = np.zeros(self.batch_size)
-        while cnt < self.batch_size * steps:
+        while 1:
             for file in self.input_test:
                 f = open(file)
                 next(f)
@@ -110,9 +110,10 @@ class Data:
                     X1[i] = self.acgt[e]
                     X2[i] = self.acgt[p]
                     X3[i] = float(p - e) / self.distance_scaler
-                    self.Y_actual[cnt] = float(example[2])
-                    self.Y_ripple[cnt] = float(example[4])
-                    self.distance[cnt] = int(example[3])
+                    if cnt < self.batch_size * steps:
+                        self.Y_actual[cnt] = float(example[2])
+                        self.Y_ripple[cnt] = float(example[4])
+                        self.distance[cnt] = int(example[3])
                     i+= 1
                     cnt += 1
                 f.close()
