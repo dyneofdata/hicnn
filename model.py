@@ -95,10 +95,12 @@ class Model:
 
     def test(self):
         model = load_model(self.output_name + '.hdf5')
-        steps = 10000
-        Y_predict = model.predict_generator(self.data.generate_test(steps),
-                                            workers = 1,
-                                            steps = steps)
+        #steps = 10000
+        #Y_predict = model.predict_generator(self.data.generate_test(steps),
+        #                                    workers = 1,
+        #                                    steps = steps)
+        test_input = self.data.generate_test_whole()
+        Y_predict = model.predict(test_input)
         Y_predict = Y_predict[:,0]
         
         plot.generate_plots(self.data.distance, 
